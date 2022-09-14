@@ -27,9 +27,9 @@ class BottomNavBar extends StatelessWidget {
       'Watch',
       'Inbox',
     ];
-    return ClipRect(
-      child: Material(
-        color: Colors.black.withOpacity(.85),
+    return Material(
+      color: Colors.black.withOpacity(.85),
+      child: ClipRect(
         child: BackdropFilter(
           filter: ImageFilter.blur(
             sigmaX: 7.0,

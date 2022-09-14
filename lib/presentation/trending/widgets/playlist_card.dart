@@ -6,13 +6,25 @@ import 'package:freshcut/style.dart';
 class PlaylistCard extends StatelessWidget {
   final Color cardMainColor;
   final String title, imagePath;
+  final int newVideosCount, watchCount;
 
   const PlaylistCard({
     Key? key,
     required this.cardMainColor,
     required this.title,
     required this.imagePath,
-  }) : super(key: key);
+    required this.newVideosCount,
+    required this.watchCount,
+  })  : assert(watchCount >= 0 && watchCount <= newVideosCount),
+        super(key: key);
+
+  Color get newVideosCountColor => watchProgress < 1 ? lightOrange : grey2;
+
+  Color get watchCountColor => watchProgress > 0 ? grey3 : lightOrange;
+
+  double get watchProgress => (watchCount == 0 || newVideosCount == 0)
+      ? 0
+      : (watchCount / newVideosCount);
 
   @override
   Widget build(BuildContext context) {
@@ -116,8 +128,121 @@ class PlaylistCard extends StatelessWidget {
               height: 25 / 20,
             ),
           ),
+          const SizedBox(
+            height: 2,
+          ),
+          Row(
+            children: [
+              Text(
+                '+$newVideosCount New Videos',
+                style: TextStyle(
+                  color: newVideosCountColor,
+                  fontSize: 12,
+                  height: 16 / 12,
+                  fontWeight: FontWeight.w400,
+                ),
+              ),
+              const Spacer(),
+              Padding(
+                padding: const EdgeInsets.only(top: 2.0),
+                child: Icon(
+                  Icons.remove_red_eye_outlined,
+                  color: watchCountColor,
+                  size: 12,
+                ),
+              ),
+              const SizedBox(
+                width: 3.5,
+              ),
+              Text(
+                '$watchCount/$newVideosCount',
+                style: TextStyle(
+                  color: watchCountColor,
+                  fontSize: 12,
+                  height: 16 / 12,
+                  fontWeight: FontWeight.w400,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(
+            height: 16,
+          ),
+          _progressBar(),
+          const SizedBox(
+            height: 15,
+          ),
         ],
       ),
+    );
+  }
+
+  Widget _progressBar() {
+    return Stack(
+      children: [
+        Container(
+          height: 4,
+          width: double.infinity,
+          decoration: BoxDecoration(
+            color: Colors.white.withOpacity(.1),
+            borderRadius: BorderRadius.circular(4),
+          ),
+          clipBehavior: Clip.antiAlias,
+        ),
+        LayoutBuilder(
+          builder: (_, constraint) {
+            final width = constraint.maxWidth * watchProgress;
+            return Align(
+              alignment: Alignment.topLeft,
+              child: Stack(
+                children: [
+                  if (watchProgress > 0 && watchProgress < 1)
+                    SizedBox(
+                      width: width,
+                      child: Align(
+                        alignment: Alignment.centerRight,
+                        child: Transform.translate(
+                          offset: const Offset(5, 0),
+                          child: Container(
+                            width: 13,
+                            height: 6,
+                            decoration: BoxDecoration(
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.white.withOpacity(.4),
+                                  blurRadius: 10,
+                                  spreadRadius: 2,
+                                )
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  Container(
+                    width: width,
+                    height: 4,
+                    decoration: BoxDecoration(
+                      color: watchProgress < 1 ? null : lightOrange,
+                      gradient: watchProgress == 1
+                          ? null
+                          : const LinearGradient(
+                              stops: [0, 0.95, 0.98],
+                              colors: [
+                                lightOrange,
+                                lightOrange,
+                                Colors.white,
+                              ],
+                            ),
+                      borderRadius: BorderRadius.circular(4),
+                    ),
+                  ),
+                ],
+              ),
+            );
+          },
+        ),
+      ],
     );
   }
 }
