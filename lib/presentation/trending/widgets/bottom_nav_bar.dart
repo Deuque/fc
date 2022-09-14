@@ -28,7 +28,7 @@ class BottomNavBar extends StatelessWidget {
       'Inbox',
     ];
     return Material(
-      color: Colors.black.withOpacity(.85),
+      color: Colors.black.withOpacity(.82),
       child: ClipRect(
         child: BackdropFilter(
           filter: ImageFilter.blur(
