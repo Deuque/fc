@@ -149,8 +149,8 @@ class TrendingTodayWidget extends StatelessWidget {
         ),
         BackdropFilter(
           filter: ImageFilter.blur(
-            sigmaX: 14.0,
-            sigmaY: 14.0,
+            sigmaX: 10.0,
+            sigmaY: 10.0,
           ),
           child: Text.rich(
             TextSpan(
