@@ -26,3 +26,6 @@ flutter:
         - asset: assets/fonts/aktiv_grotesk/ag-light.ttf
         - asset: assets/fonts/aktiv_grotesk/ag-medium.ttf
         - asset: assets/fonts/aktiv_grotesk/ag-regular.ttf
+
+  assets:
+    - assets/images/
